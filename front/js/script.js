@@ -1,32 +1,82 @@
-// getproduct est déclarer
-const getProduct = document.getElementById("items");
-
-// allproduct est déclarer pour chaque canapé
-const allProduct = document.getElementsByClassName("items");
-
 // fetch va chercher les canapé sur l'API
-fetch("http://localhost:3000/api/products").then((res) => {
-  getProduct.innerHTML = `
-  <a href="./product.html?id=107fb5b75607497b96722bda5b504926">
-  <article>
-  <img src="pcinq/back/images/kanap01.jpg" alt="Photo d'un canapé bleu, deux places">
-  <h3 class="productName">Kanap Sinopé</h3>
-  <p class="productDescription">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-</article>
-</a>
-  `;
-});
+//function getProducts() {
+// return fetch("http://localhost:3000/api/products")
+//   .then((res) => res.json())
+//  .then((articles) => {
+//     afficherArticles(articles);
+//   })
+// .catch(function (error) {
+//  console.error(`erreur recuperation produits:`, error);
+// });
+//}
 
-fetch(
-  "http://localhost:3000/api/products/107fb5b75607497b96722bda5b504926"
-).then((res) => {
-  allProduct.innerHTML = `
-  <a href="./product.html?id=107fb5b75607497b96722bda5b504926">
-  <article>
-  <img src="pcinq/back/images/kanap01.jpg" alt="Photo d'un canapé bleu, deux places">
-  <h3 class="productName">Kanap Sinopé</h3>
-  <p class="productDescription">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-</article>
-</a>
-  `;
-});
+//getProducts();
+
+//function afficherArticles(articles) {
+//for (article of articles) {
+//  const articleHtml = `
+// <a href=${"./product.html"}>
+//   <article>
+//    <img src="${article.imageUrl}" alt="${article.altTxt}>
+//   <h3 class="productName">${article.name}</h3>
+//   <p class="productDescription">${article.description}</p>
+//  </article>
+//  </a>
+//  `;
+//  items.innerHTML += articleHtml;
+// }
+//}
+
+//<p>
+//${article.name} - ${article.price}
+//</p>;
+//console.log("je suis la");
+
+// const items = getProducts().then((res) => {
+//   return res;
+// });
+// console.log(`--> items ici:`, items);
+
+// (async function () {
+//   const items = await getProducts();
+//   //console.log(`--> items ici:`, items);
+
+//   for (item of items) {
+//     console.log(item);
+//   }
+// });
+
+// déclare une variable en tableau(array)
+let kanapData = [];
+
+// fetch http pour récuperer les produits de API
+const fetchKanap = async () => {
+  await fetch("http://localhost:3000/api/products")
+    .then((res) => res.json())
+    .then((promise) => {
+      kanapData = promise;
+      console.log(kanapData);
+    });
+};
+
+// fonction qui va faire apparaitre chaque élément
+const kanapDisplay = async () => {
+  await fetchKanap();
+  document.getElementById("items").innerHTML = kanapData
+    .map(
+      (canape) => `
+        <a href="./product.html?${canape._id}">
+            <article>
+              <img src="${canape.imageUrl}" alt="${canape.altTxt}">
+              <h3 class="productName">${canape.name}</h3>
+              <p class="productDescription">${canape.description}</p>
+            </article>
+          </a>
+`
+    )
+    // enlève les virgules entre chaque canapé
+    .join("");
+};
+
+//appel la fonction
+kanapDisplay();
