@@ -1,82 +1,47 @@
-// fetch va chercher les canapé sur l'API
-//function getProducts() {
-// return fetch("http://localhost:3000/api/products")
-//   .then((res) => res.json())
-//  .then((articles) => {
-//     afficherArticles(articles);
-//   })
-// .catch(function (error) {
-//  console.error(`erreur recuperation produits:`, error);
-// });
-//}
+// appel de la fonction pour récupérer les produits disponibles
+recupProduits();
 
-//getProducts();
+// appel de la fonction pour la création des éléments via la liste API
+creaProduits();
 
-//function afficherArticles(articles) {
-//for (article of articles) {
-//  const articleHtml = `
-// <a href=${"./product.html"}>
-//   <article>
-//    <img src="${article.imageUrl}" alt="${article.altTxt}>
-//   <h3 class="productName">${article.name}</h3>
-//   <p class="productDescription">${article.description}</p>
-//  </article>
-//  </a>
-//  `;
-//  items.innerHTML += articleHtml;
-// }
-//}
+// fonction pour récuperer les produits par l'API
+async function recupProduits() {
+  let produits = await fetch("http://localhost:3000/api/products");
+  //console.log("les produits sont récupéré");
+  return produits.json();
+}
 
-//<p>
-//${article.name} - ${article.price}
-//</p>;
-//console.log("je suis la");
+// fonction pour la création des éléments a, h3, img etc...
+async function creaProduits() {
+  let resultats = await recupProduits().then((produits) => {
+    for (let i = 0; i < produits.length; i++) {
+      // créer et inserer l'élément 'a' (href)
+      let produitsLien = document.createElement("a");
+      document.querySelector(".items").appendChild(produitsLien);
+      produitsLien.href = `product.html?id=${produits[i]._id}`;
 
-// const items = getProducts().then((res) => {
-//   return res;
-// });
-// console.log(`--> items ici:`, items);
+      // créer et inserer l'élement 'article' (ensemble img description etc.)
+      let produitsArticle = document.createElement("article");
+      produitsLien.appendChild(produitsArticle);
 
-// (async function () {
-//   const items = await getProducts();
-//   //console.log(`--> items ici:`, items);
+      // creer et inserer l'img (image)
+      let produitsImg = document.createElement("img");
+      produitsArticle.appendChild(produitsImg);
+      produitsImg.src = produits[i].imageUrl;
+      produitsImg.alt = produits[i].altTxt;
 
-//   for (item of items) {
-//     console.log(item);
-//   }
-// });
+      // creer et inserer le titre h3
+      let produitsNom = document.createElement("h3");
+      produitsArticle.appendChild(produitsNom);
+      produitsNom.classList.add("produitsNom");
+      produitsNom.innerHTML = produits[i].name;
 
-// déclare une variable en tableau(array)
-let kanapData = [];
-
-// fetch http pour récuperer les produits de API
-const fetchKanap = async () => {
-  await fetch("http://localhost:3000/api/products")
-    .then((res) => res.json())
-    .then((promise) => {
-      kanapData = promise;
-      console.log(kanapData);
-    });
-};
-
-// fonction qui va faire apparaitre chaque élément
-const kanapDisplay = async () => {
-  await fetchKanap();
-  document.getElementById("items").innerHTML = kanapData
-    .map(
-      (canape) => `
-        <a href="./product.html?${canape._id}">
-            <article>
-              <img src="${canape.imageUrl}" alt="${canape.altTxt}">
-              <h3 class="productName">${canape.name}</h3>
-              <p class="productDescription">${canape.description}</p>
-            </article>
-          </a>
-`
-    )
-    // enlève les virgules entre chaque canapé
-    .join("");
-};
-
-//appel la fonction
-kanapDisplay();
+      // creer et inserer le 'p' (description du produit)
+      let produitsDescript = document.createElement("p");
+      produitsArticle.appendChild(produitsDescript);
+      produitsDescript.classList.add("produitsNom");
+      produitsDescript.innerHTML = produits[i].description;
+    }
+  });
+  //console.log("les produits sont crées");
+}
