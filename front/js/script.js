@@ -1,15 +1,10 @@
-// appel de la fonction pour récupérer les produits disponibles
-recupProduits();
-
-// appel de la fonction pour la création des éléments via la liste API
-creaProduits();
-
 // fonction pour récuperer les produits par l'API
 async function recupProduits() {
   let produits = await fetch("http://localhost:3000/api/products");
-  //console.log("les produits sont récupéré");
   return produits.json();
 }
+// appel de la fonction pour récupérer les produits disponibles
+recupProduits();
 
 // fonction pour la création des éléments a, h3, img etc...
 async function creaProduits() {
@@ -43,5 +38,6 @@ async function creaProduits() {
       produitsDescript.innerHTML = produits[i].description;
     }
   });
-  //console.log("les produits sont crées");
 }
+// appel de la fonction pour la création des éléments via la liste API
+creaProduits();
